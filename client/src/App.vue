@@ -1,15 +1,33 @@
 <template>
-  <div class="full-width center-content">
-    <hello-component name="World"/>
-  </div>
+  <v-app class="qa-app">
+    <v-container
+        fluid
+        pa-0
+    >
+      <Header/>
+      <vehicle-type mt-5/>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
-  import HelloComponent from './components/HelloComponent.vue'
+  import Header from './components/Header.vue'
+  import VehicleType from './components/VehicleType.vue'
 
   export default {
     components: {
-      HelloComponent
+      Header,
+      VehicleType
     }
   }
 </script>
+
+<style lang="stylus">
+  .qa-app
+    font-family 'Avenir', Helvetica, Arial, sans-serif
+    -webkit-font-smoothing antialiased
+    -moz-osx-font-smoothing grayscale
+    text-align center
+    color #2c3e50
+</style>
+
