@@ -51,10 +51,20 @@
         </v-dialog>
       </v-flex>
       <v-flex xs12 mt-5>
+        <v-text-field
+            v-model="search"
+            append-icon="fas fa-search"
+            label="Search"
+            single-line
+            hide-details
+        />
+      </v-flex>
+      <v-flex xs12 mt-5>
         <v-data-table
             :headers="headers"
-            :items="venicles"
+            :items="vehicles"
             class="elevation-1"
+            :search="search"
         >
           <template slot="headerCell" slot-scope="props">
             <v-tooltip bottom>
@@ -88,6 +98,9 @@
               </v-icon>
             </td>
           </template>
+          <v-alert slot="no-results" :value="true" color="error" icon="fas fa-exclamation-triangle">
+            Your search for "{{ search }}" found no results.
+          </v-alert>
         </v-data-table>
       </v-flex>
     </v-layout>
@@ -99,6 +112,7 @@
     data() {
       return {
         dialog: false,
+        search: '',
         headers : [
           {
             text    : 'Model',
@@ -107,29 +121,27 @@
             value   : 'model'
           },
           {text: 'Brand', value: 'brand', align: 'center'},
-          {text: 'Capacity', value: 'capacity', align: 'center'},
-          {text: 'Fuel Capacity', value: 'fuel_capacity', align: 'center'},
-          {text: 'Fuel Consumption', value: 'fuel_consumption', align: 'center'},
+          {text: 'Capacity, t', value: 'capacity', align: 'center'},
+          {text: 'Fuel Capacity, L', value: 'fuel_capacity', align: 'center'},
+          {text: 'Fuel Consumption, L/100 km', value: 'fuel_consumption', align: 'center'},
           {text: 'Actions', value: 'name', sortable: false}
         ],
-        venicles: [],
         editedIndex: -1,
         editedItem: {
-          name    : '',
-          calories: 0,
-          fat     : 0,
-          carbs   : 0,
-          protein : 0
+          model    : '',
+          brand: '',
+          capacity     : 0,
+          fuel_capacity   : 0,
+          fuel_consumption : 0
         },
         defaultItem: {
-          name    : '',
-          calories: 0,
-          fat     : 0,
-          carbs   : 0,
-          protein : 0
+          model    : '',
+          brand: '',
+          capacity     : 0,
+          fuel_capacity   : 0,
+          fuel_consumption : 0
         },
-
-        venicles: [
+        vehicles: [
           {
             value   : false,
             model    : 'Frozen Yogurt',
@@ -228,14 +240,14 @@
     
     methods: {
       editItem(item) {
-        this.editedIndex = this.venicles.indexOf(item)
+        this.editedIndex = this.vehicles.indexOf(item)
         this.editedItem  = Object.assign({}, item)
         this.dialog      = true
       },
   
       deleteItem(item) {
-        const index = this.venicles.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.venicles.splice(
+        const index = this.vehicles.indexOf(item)
+        confirm('Are you sure you want to delete this item?') && this.vehicles.splice(
           index,
           1
         )
@@ -251,9 +263,9 @@
   
       save() {
         if (this.editedIndex > -1) {
-          Object.assign(this.venicles[this.editedIndex], this.editedItem)
+          Object.assign(this.vehicles[this.editedIndex], this.editedItem)
         } else {
-          this.venicles.push(this.editedItem)
+          this.vehicles.push(this.editedItem)
         }
         this.close()
       }
