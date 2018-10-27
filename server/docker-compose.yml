@@ -1,0 +1,20 @@
+version: '3.6'
+
+services:
+  db:
+    image: kartoza/postgis:9.6-2.4
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  web:
+    build: .
+    command: python /traffic_optimizer/manage.py migrate --noinput
+    command: python /traffic_optimizer/manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    environment:
+      - SECRET_KEY=changemeinprod
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
