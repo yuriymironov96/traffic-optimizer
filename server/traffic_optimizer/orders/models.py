@@ -7,11 +7,11 @@ class Parcel(models.Model):
         related_name='departure_parcels',
         on_delete=models.CASCADE
     )
-    # delivery_point = models.ForeignKey(
-    #     'locations.Location',
-    #     related_name='delivery_parcels',
-    #     on_delete=models.CASCADE
-    # )
+    delivery_point = models.ForeignKey(
+        'locations.Location',
+        related_name='delivery_parcels',
+        on_delete=models.CASCADE
+    )
     customer_phone = models.CharField(
         max_length=20,
     )

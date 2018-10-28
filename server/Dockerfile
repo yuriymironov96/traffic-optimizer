@@ -6,13 +6,13 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set work directory
-WORKDIR /server
+WORKDIR /traffic_optimizer
 
 # Install dependencies
 RUN pip install --upgrade pip
 RUN pip install pipenv
-COPY ./Pipfile /Pipfile
+COPY ./traffic_optimizer/Pipfile /traffic_optimizer/Pipfile
 RUN pipenv install --deploy --system --skip-lock --dev
 
 # # Copy project
-COPY . /.
+COPY . /traffic_optimizer/

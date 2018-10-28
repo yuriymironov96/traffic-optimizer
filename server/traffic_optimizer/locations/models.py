@@ -10,7 +10,13 @@ class Location(models.Model):
         max_length=256,
         unique=True,
     )
-    # coordinates = models.CharField(
-    #     max_length=256,
-    #     unique=True,
-    # )
+    longitude = models.DecimalField(
+        max_digits=10,
+        decimal_places=6,
+        default=0,
+    )
+    latitude = models.DecimalField(
+        max_digits=10,
+        decimal_places=6,
+        default=0,
+    )
