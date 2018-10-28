@@ -14,6 +14,8 @@ Routes will be calculated on the fly for the sake of interactivity and simplicit
 ```bash
 pip install virtualenv
 ```
+On Windows it should already be installed with your Python distribution.
+
 3. Create virtual environment called "venv" within the project directory. For Mac/Unix: 
 ```bash
 virtualenv -p python3 venv
@@ -21,6 +23,10 @@ virtualenv -p python3 venv
 4. Activate virtual environemnt. For Mac/Unix:
 ```bash
 source venv/bin/activate
+```
+For Windows:
+```bash
+venv/Scripts/activate.bat
 ```
 5. Install server-side dependencies. Go to server/traffic_optimizer, run
 ```bash
