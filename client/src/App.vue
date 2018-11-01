@@ -5,7 +5,7 @@
         pa-0
     >
       <Header/>
-      <vehicle-type mt-5/>
+      <MapComponent/>
     </v-container>
   </v-app>
 </template>
@@ -13,11 +13,13 @@
 <script>
   import Header from './components/Header.vue'
   import VehicleType from './components/VehicleType.vue'
+  import MapComponent from './components/MapComponent.vue'
 
   export default {
     components: {
       Header,
-      VehicleType
+      VehicleType,
+      MapComponent
     }
   }
 </script>
@@ -30,4 +32,3 @@
     text-align center
     color #2c3e50
 </style>
-
