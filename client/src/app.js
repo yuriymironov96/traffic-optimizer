@@ -7,8 +7,7 @@ import '../assets/app.styl';
 
 const instance = axios.create({
                                 baseURL: 'http://localhost:8000/api',
-                                timeout: 1000,
-                                headers: {crossDomain: true}
+                                timeout: 1000
                               });
 instance.get('locations/locations')
   .then(function (response) {
