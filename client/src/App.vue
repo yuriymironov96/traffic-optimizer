@@ -1,11 +1,10 @@
 <template>
   <v-app class="qa-app">
+    <Header/>
     <v-container
-        fluid
         pa-0
     >
-      <Header/>
-      <Order />
+      <router-view/>
     </v-container>
   </v-app>
 </template>
@@ -35,4 +34,7 @@
     -moz-osx-font-smoothing grayscale
     text-align center
     color #2c3e50
+
+    .container
+      margin-top 80px
 </style>
