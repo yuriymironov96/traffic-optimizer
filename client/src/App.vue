@@ -5,6 +5,7 @@
         pa-0
     >
       <Header/>
+      <Order />
     </v-container>
   </v-app>
 </template>
@@ -13,12 +14,16 @@
   import Header from './components/Header.vue'
   import VehicleType from './components/VehicleType.vue'
   import MapComponent from './components/MapComponent.vue'
+  import Location from './components/Location.vue'
+  import Order from './components/Order.vue'
 
   export default {
     components: {
       Header,
       VehicleType,
-      MapComponent
+      MapComponent,
+      Location,
+      Order
     }
   }
 </script>
