@@ -77,8 +77,8 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-center">{{ props.item.name }}</td>
-                    <td class="text-xs-left">{{ props.item.phone }}</td>
+                    <td class="text-xs-left">{{ props.item.name }}</td>
+                    <td class="text-xs-center">{{ props.item.phone }}</td>
                     <td class="text-xs-center">{{ props.item.weight }}</td>
                     <td class="text-xs-center">{{ props.item.departure }}</td>
                     <td class="text-xs-center">{{ props.item.delivery }}</td>
@@ -115,12 +115,11 @@ export default {
             search: '',
             headers : [
                 {
-                    text    : 'Name',
+                    text    : 'Customer`s name',
                     align   : 'left',
                     sortable: true,
                     value   : 'name'
                 },
-                {text: 'Customer`s name', value: 'name', align: 'center'},
                 {text: 'Customer`s phone', value: 'phone', align: 'center'},
                 {text: 'Weight, kg', value: 'weight', align: 'center'},
                 {text: 'Departure point', value: 'departure', align: 'center'},
