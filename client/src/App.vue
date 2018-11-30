@@ -5,7 +5,7 @@
         pa-0
     >
       <Header/>
-      <MapComponent/>
+      <Order />
     </v-container>
   </v-app>
 </template>
