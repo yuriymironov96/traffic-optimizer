@@ -105,9 +105,11 @@
 export default {
   mounted() {
     this.$instance.get(this.api)
-    .then(function (response) {
+    .then((response) => {
       if(!response.data.count) {
         this.fillData();
+      } else {
+        this.locations = response.data.results;
       }
     })
     .catch(function (error) {
@@ -219,18 +221,18 @@ export default {
 
   methods: {
     fillData() {
-      postRequest(this.api, {
+      this.$instance.post(this.api, {
         "name": 'Street #1',
         "address": 'st. Somewhere',
         "longitude": 26.43,
         "latitude": -50.02,
       });
 
-      postRequest(this.api, {
+      this.$instance.post(this.api, {
         "name": 'Street #2',
-        "address": 'st. Nonewhere',
-        "longitude": 73.12,
-        "latitude": -86.54,
+        "address": 'st. Anywhere',
+        "longitude": 76.03,
+        "latitude": -44.28,
       });
     },
 

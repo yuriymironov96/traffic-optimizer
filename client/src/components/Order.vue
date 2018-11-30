@@ -17,11 +17,11 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.name"
+                    <v-text-field v-model="editedItem.customer_name"
                     label="Customer Name"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.phone"
+                    <v-text-field v-model="editedItem.customer_phone"
                     label="Customer Phone"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
@@ -29,11 +29,11 @@
                     label="Weight"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.departure"
+                    <v-text-field v-model="editedItem.departure_point"
                     label="Departure Point"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.delivery"
+                    <v-text-field v-model="editedItem.delivery_point"
                     label="Delivery Point"></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -77,11 +77,11 @@
           </v-tooltip>
         </template>
         <template slot="items" slot-scope="props">
-          <td class="text-xs-left">{{ props.item.name }}</td>
-          <td class="text-xs-center">{{ props.item.phone }}</td>
+          <td class="text-xs-left">{{ props.item.customer_name }}</td>
+          <td class="text-xs-center">{{ props.item.customer_phone }}</td>
           <td class="text-xs-center">{{ props.item.weight }}</td>
-          <td class="text-xs-center">{{ props.item.departure }}</td>
-          <td class="text-xs-center">{{ props.item.delivery }}</td>
+          <td class="text-xs-center">{{ props.item.departure_point }}</td>
+          <td class="text-xs-center">{{ props.item.delivery_point }}</td>
           <td class="justify-center layout px-0">
             <v-icon
             small
@@ -111,9 +111,11 @@
 export default {
   mounted() {
     this.$instance.get(this.api)
-    .then(function (response) {
+    .then((response) => {
       if(!response.data.count) {
         this.fillData();
+      } else {
+        this.orders = response.data.results;
       }
     })
     .catch(function (error) {
@@ -131,13 +133,13 @@ export default {
           text    : 'Customer`s name',
           align   : 'left',
           sortable: true,
-          value   : 'name'
+          value   : 'customer_name'
         },
-        {text: 'Customer`s phone', value: 'phone', align: 'center'},
+        {text: 'Customer`s phone', value: 'customer_phone', align: 'center'},
         {text: 'Weight, kg', value: 'weight', align: 'center'},
-        {text: 'Departure point', value: 'departure', align: 'center'},
-        {text: 'Delivery point', value: 'delivery', align: 'center'},
-        {text: 'Actions', value: 'name', sortable: false}
+        {text: 'Departure point', value: 'departure_point', align: 'center'},
+        {text: 'Delivery point', value: 'delivery_point', align: 'center'},
+        {text: 'Actions', value: 'customer_name', sortable: false}
       ],
       editedIndex: -1,
       editedItem: {
@@ -220,21 +222,21 @@ export default {
 
   methods: {
     fillData() {
-      instance.get('locations/locations/')
-      .then(function (response) {
+      this.$instance.get('locations/locations/')
+      .then((response) => {
         if(response.data.count < 2) {
           console.log('Not enough locations to form an order');
           return;
         } else {
-          postRequest(this.api, {
-            "customer_phone": '57454354',
-            "customer_name": 'Sam',
-            "weight": 79,
-            "departure_point": 1,
-            "delivery_point": 2,
+          this.$instance.post(this.api, {
+            "customer_phone": '5623241',
+            "customer_name": 'Lebowski',
+            "weight": 86,
+            "departure_point": 2,
+            "delivery_point": 1,
           });
 
-          postRequest(this.api, {
+          this.$instance.post(this.api, {
             "customer_name": 'Liz',
             "customer_phone": '6478942',
             "weight": 62,

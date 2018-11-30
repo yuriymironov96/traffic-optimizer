@@ -21,11 +21,11 @@
                     label="Model"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.brand"
+                    <v-text-field v-model="editedItem.vendor"
                     label="Brand"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="editedItem.capacity"
+                    <v-text-field v-model="editedItem.max_load"
                     label="Capacity"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
@@ -78,8 +78,8 @@
         </template>
         <template slot="items" slot-scope="props">
           <td class="text-xs-left">{{ props.item.model }}</td>
-          <td class="text-xs-center">{{ props.item.brand }}</td>
-          <td class="text-xs-center">{{ props.item.capacity }}</td>
+          <td class="text-xs-center">{{ props.item.vendor }}</td>
+          <td class="text-xs-center">{{ props.item.max_load }}</td>
           <td class="text-xs-center">{{ props.item.fuel_capacity }}</td>
           <td class="text-xs-center">{{ props.item.fuel_consumption }}</td>
           <td class="justify-center layout px-0">
@@ -111,9 +111,11 @@
 export default {
   mounted() {
     this.$instance.get(this.api)
-    .then(function (response) {
+      .then((response) => {
       if(!response.data.count) {
         this.fillData();
+      } else {
+        this.vehicles = response.data.results;
       }
     })
     .catch(function (error) {
@@ -133,11 +135,11 @@ export default {
           sortable: true,
           value   : 'model'
         },
-        {text: 'Brand', value: 'brand', align: 'center'},
-        {text: 'Capacity, t', value: 'capacity', align: 'center'},
+        {text: 'Vendor', value: 'vendor', align: 'center'},
+        {text: 'Max load, t', value: 'max_load', align: 'center'},
         {text: 'Fuel Capacity, L', value: 'fuel_capacity', align: 'center'},
         {text: 'Fuel Consumption, L/100 km', value: 'fuel_consumption', align: 'center'},
-        {text: 'Actions', value: 'name', sortable: false}
+        {text: 'Actions', value: 'model', sortable: false}
       ],
       editedIndex: -1,
       editedItem: {
@@ -251,7 +253,7 @@ export default {
 
   methods: {
     fillData() {
-      postRequest(this.api, {
+      this.$instance.post(this.api, {
         "license_plate_number": "42C1",
         "model": 'Honeycomb',
         "vendor": 408,
@@ -260,7 +262,7 @@ export default {
         "fuel_consumption": 6.5
       });
 
-      postRequest(this.api, {
+      this.$instance.post(this.api, {
         "license_plate_number": '98SE2',
         "model": 'Lollipop',
         "vendor": 392,
