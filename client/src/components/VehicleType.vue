@@ -250,7 +250,6 @@ export default {
       val || this.close()
     }
   },
-
   methods: {
     fillData() {
       this.$instance.post(this.api, {
