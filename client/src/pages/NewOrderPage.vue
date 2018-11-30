@@ -4,9 +4,13 @@
         v-for="(item,i) in panels"
         :key="i"
         :value="panel[i]"
-        :disabled="(i > currentPanelIndex + 1) || (i < currentPanelIndex)"
+        :disabled="(i > currentPanelIndex + 1)"
     >
-      <div slot="header" @click="onPanelClick(i)">{{item.header}}</div>
+      <div slot="header" @click="onPanelClick(i)">
+        <h2 class="headline">
+          {{item.header}}
+        </h2>
+      </div>
       <v-card>
         <v-layout pa-5>
           <location v-if="item.componentName === 'Location'"/>
@@ -19,7 +23,9 @@
 </template>
 
 <script>
-  import { Location, VehicleType, Order} from '../components';
+  import Location from '../components/Location.vue';
+  import VehicleType from '../components/VehicleType.vue';
+  import Order from '../components/Order.vue';
 
   export default {
     name: "NewOrderPage",
