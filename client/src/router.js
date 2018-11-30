@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import MainPage from './pages/MainPage.vue'
 import HistoryPage from './pages/HistoryPage.vue'
-import Location from './components/Location.vue'
+import NewOrderPage from './pages/NewOrderPage.vue'
 
 Vue.use(Router)
 
@@ -20,9 +20,9 @@ export default new Router(
         component: HistoryPage
       },
       {
-        path     : '/startLocation',
-        name     : 'startLocation',
-        component: Location
+        path     : '/newOrderPage',
+        name     : 'newOrderPage',
+        component: NewOrderPage
       }
     ]
   }
