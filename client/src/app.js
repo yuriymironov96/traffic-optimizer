@@ -6,21 +6,16 @@ import App from './App.vue';
 import router from './router.js'
 import '../assets/app.styl';
 
-// const instance = axios.create({
-//                                 baseURL: 'http://localhost:8000/api',
-//                                 timeout: 1000
-//                               });
-// instance.get('locations/locations')
-//   .then(function (response) {
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     console.error(error);
-//   });
+const instance = axios.create({
+                                baseURL: 'http://localhost:8000/api',
+                                timeout: 1000
+                              });
 
 Vue.use(Vuetify, {
   iconfont: 'fa'
 });
+
+Vue.prototype.$instance = instance;
 
 new Vue({
           el    : '#app',
