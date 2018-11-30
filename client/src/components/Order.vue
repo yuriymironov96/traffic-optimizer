@@ -143,70 +143,20 @@ export default {
       ],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        phone: '',
+        customer_name: '',
+        customer_phone: '',
         weight: 0,
-        departure: '',
-        delivery: '',
+        departure_point: '',
+        delivery_point: '',
       },
       defaultItem: {
-        name: '',
-        phone: '',
+        customer_name: '',
+        customer_phone: '',
         weight: 0,
-        departure: '',
-        delivery: '',
+        departure_point: '',
+        delivery_point: '',
       },
-      orders: [
-        {
-          name: 'Customar',
-          phone: '453534',
-          weight: 90,
-          departure: 'From',
-          delivery: 'To',
-        },
-        {
-          name: 'Customeer',
-          phone: '5643433',
-          weight: 70,
-          departure: 'Here',
-          delivery: 'There',
-        },
-        {
-          name: 'Zeestumer',
-          phone: '9865325',
-          weight: 99,
-          departure: 'Dep',
-          delivery: 'Del',
-        },
-        {
-          name: 'Amcusteer',
-          phone: '7843566',
-          weight: 58,
-          departure: 'In',
-          delivery: 'Out',
-        },
-        {
-          name: 'Liz',
-          phone: '6478942',
-          weight: 62,
-          departure: 'Up',
-          delivery: 'Down',
-        },
-        {
-          name: 'Lebowski',
-          phone: '123456',
-          weight: 94,
-          departure: 'Down',
-          delivery: 'There',
-        },
-        {
-          name: 'Donny',
-          phone: '8765',
-          weight: 86,
-          departure: 'In',
-          delivery: 'Here',
-        }
-      ]
+      orders: []
     }
   },
   computed: {
@@ -229,19 +179,19 @@ export default {
           return;
         } else {
           this.$instance.post(this.api, {
-            "customer_phone": '5623241',
+            "customer_phone": '51231',
             "customer_name": 'Lebowski',
             "weight": 86,
-            "departure_point": 2,
-            "delivery_point": 1,
+            "departure_point": response.data.results[0].id,
+            "delivery_point": response.data.results[1].id,
           });
 
           this.$instance.post(this.api, {
-            "customer_name": 'Liz',
-            "customer_phone": '6478942',
+            "customer_name": 'Elizabeth',
+            "customer_phone": '123432',
             "weight": 62,
-            "departure_point": 2,
-            "delivery_point": 1,
+            "departure_point": response.data.results[1].id,
+            "delivery_point": response.data.results[0].id,
           });
         }
       })
@@ -257,11 +207,11 @@ export default {
     },
 
     deleteItem(item) {
-      const index = this.orders.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.orders.splice(
-        index,
-        1
-      )
+      const index = this.orders.indexOf(item);
+      if (confirm('Are you sure you want to delete this item?')) {
+        this.orders.splice(index, 1);
+        this.$instance.delete(`${this.api}${item.id}`);
+      }
     },
 
     close() {
@@ -276,7 +226,17 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.orders[this.editedIndex], this.editedItem)
       } else {
-        this.orders.push(this.editedItem)
+        var newItem = this.editedItem;
+        this.$instance.post(this.api, {
+          "customer_name": this.editedItem.customer_name,
+          "customer_phone": this.editedItem.customer_phone,
+          "weight": this.editedItem.weight,
+          "departure_point": this.editedItem.departure_point,
+          "delivery_point": this.editedItem.delivery_point,
+        })
+        .then((response) => {
+          this.orders.push(newItem);
+        });
       }
       this.close()
     }

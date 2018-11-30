@@ -244,10 +244,10 @@ export default {
 
     deleteItem(item) {
       const index = this.locations.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.locations.splice(
-        index,
-        1
-      )
+      if (confirm('Are you sure you want to delete this item?')) {
+        this.locations.splice(index, 1);
+        this.$instance.delete(`${this.api}${item.id}`);
+      }
     },
 
     close() {
@@ -262,7 +262,16 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.locations[this.editedIndex], this.editedItem)
       } else {
-        this.locations.push(this.editedItem)
+        var newItem = this.editedItem;
+        this.$instance.post(this.api, {
+          "name": this.editedItem.name,
+          "address": this.editedItem.address,
+          "longitude": this.editedItem.longitude,
+          "latitude": this.editedItem.latitude,
+        })
+        .then((response) => {
+          this.locations.push(newItem);
+        });
       }
       this.close()
     }

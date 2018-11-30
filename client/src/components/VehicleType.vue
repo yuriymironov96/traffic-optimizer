@@ -22,11 +22,11 @@
                   </v-flex>
                   <v-flex xs12 sm6 md4>
                     <v-text-field v-model="editedItem.vendor"
-                    label="Brand"></v-text-field>
+                    label="Vendor"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
                     <v-text-field v-model="editedItem.max_load"
-                    label="Capacity"></v-text-field>
+                    label="Max capacity"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6 md4>
                     <v-text-field v-model="editedItem.fuel_capacity"
@@ -35,6 +35,10 @@
                   <v-flex xs12 sm6 md4>
                     <v-text-field v-model="editedItem.fuel_consumption"
                     label="Fuel Consumption"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.license_plate_number"
+                    label="Plate number"></v-text-field>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -79,6 +83,7 @@
         <template slot="items" slot-scope="props">
           <td class="text-xs-left">{{ props.item.model }}</td>
           <td class="text-xs-center">{{ props.item.vendor }}</td>
+          <td class="text-xs-center">{{ props.item.license_plate_number }}</td>
           <td class="text-xs-center">{{ props.item.max_load }}</td>
           <td class="text-xs-center">{{ props.item.fuel_capacity }}</td>
           <td class="text-xs-center">{{ props.item.fuel_consumption }}</td>
@@ -136,108 +141,30 @@ export default {
           value   : 'model'
         },
         {text: 'Vendor', value: 'vendor', align: 'center'},
-        {text: 'Max load, t', value: 'max_load', align: 'center'},
-        {text: 'Fuel Capacity, L', value: 'fuel_capacity', align: 'center'},
-        {text: 'Fuel Consumption, L/100 km', value: 'fuel_consumption', align: 'center'},
+        {text: 'Max load', value: 'max_load', align: 'center'},
+        {text: 'Plate number', value: 'license_plate_number', align: 'center'},
+        {text: 'Fuel Capacity', value: 'fuel_capacity', align: 'center'},
+        {text: 'Fuel Consumption', value: 'fuel_consumption', align: 'center'},
         {text: 'Actions', value: 'model', sortable: false}
       ],
       editedIndex: -1,
       editedItem: {
         model    : '',
-        brand: '',
-        capacity     : 0,
+        vendor: '',
+        max_load     : 0,
         fuel_capacity   : 0,
-        fuel_consumption : 0
+        fuel_consumption : 0,
+        license_plate_number: ''
       },
       defaultItem: {
         model    : '',
-        brand: '',
-        capacity     : 0,
+        vendor: '',
+        max_load     : 0,
         fuel_capacity   : 0,
-        fuel_consumption : 0
+        fuel_consumption : 0,
+        license_plate_number: ''
       },
-      vehicles: [
-        {
-          value   : false,
-          model    : 'Frozen Yogurt',
-          brand: 159,
-          capacity     : 6.0,
-          fuel_capacity   : 24,
-          fuel_consumption : 4.0
-        },
-        {
-          value   : false,
-          model    : 'Ice cream sandwich',
-          brand: 237,
-          capacity     : 9.0,
-          fuel_capacity   : 37,
-          fuel_consumption : 4.3
-        },
-        {
-          value   : false,
-          model    : 'Eclair',
-          brand: 262,
-          capacity     : 16.0,
-          fuel_capacity   : 23,
-          fuel_consumption : 6.0
-        },
-        {
-          value   : false,
-          model    : 'Cupcake',
-          brand: 305,
-          capacity     : 3.7,
-          fuel_capacity   : 67,
-          fuel_consumption : 4.3
-        },
-        {
-          value   : false,
-          model    : 'Gingerbread',
-          brand: 356,
-          capacity     : 16.0,
-          fuel_capacity   : 49,
-          fuel_consumption : 3.9
-        },
-        {
-          value   : false,
-          model    : 'Jelly bean',
-          brand: 375,
-          capacity     : 0.0,
-          fuel_capacity   : 94,
-          fuel_consumption : 0.0
-        },
-        {
-          value   : false,
-          model    : 'Lollipop',
-          brand: 392,
-          capacity     : 0.2,
-          fuel_capacity   : 98,
-          fuel_consumption : 0
-        },
-        {
-          value   : false,
-          model    : 'Honeycomb',
-          brand: 408,
-          capacity     : 3.2,
-          fuel_capacity   : 87,
-          fuel_consumption : 6.5
-        },
-        {
-          value   : false,
-          model    : 'Donut',
-          brand: 452,
-          capacity     : 25.0,
-          fuel_capacity   : 51,
-          fuel_consumption : 4.9
-        },
-        {
-          value   : false,
-          model    : 'KitKat',
-          brand: 518,
-          capacity     : 26.0,
-          fuel_capacity   : 65,
-          fuel_consumption : 7
-        }
-      ]
+      vehicles: []
     }
   },
   computed: {
@@ -280,10 +207,10 @@ export default {
 
     deleteItem(item) {
       const index = this.vehicles.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.vehicles.splice(
-        index,
-        1
-      )
+      if (confirm('Are you sure you want to delete this item?')) {
+        this.vehicles.splice(index, 1);
+        this.$instance.delete(`${this.api}${item.id}`);
+      }
     },
 
     close() {
@@ -298,7 +225,18 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.vehicles[this.editedIndex], this.editedItem)
       } else {
-        this.vehicles.push(this.editedItem)
+        var newItem = this.editedItem;
+        this.$instance.post(this.api, {
+          "license_plate_number": this.editedItem.license_plate_number,
+          "model": this.editedItem.model,
+          "vendor": this.editedItem.vendor,
+          "max_load": this.editedItem.max_load,
+          "fuel_capacity": this.editedItem.fuel_capacity,
+          "fuel_consumption": this.editedItem.fuel_consumption
+        })
+        .then((response) => {
+          this.vehicles.push(newItem);
+        });
       }
       this.close()
     }
