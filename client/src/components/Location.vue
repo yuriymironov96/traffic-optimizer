@@ -98,6 +98,22 @@
 </v-alert>
 </v-data-table>
 </v-flex>
+<v-snackbar
+      style="whiteSpace: pre-line"
+      v-model="snackbar"
+      :color="color"
+      multi-line
+      :timeout="timeout"
+    >
+      <p> {{ errorText }} </p>
+      <v-btn
+        dark
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
 </v-layout>
 </template>
 
@@ -120,6 +136,10 @@ export default {
   data() {
     return {
       api: 'locations/locations/',
+      snackbar: false,
+      color: '#C12828',
+      timeout: 5000,
+      errorText: '',
       dialog: false,
       search: '',
       headers: [
@@ -236,6 +256,18 @@ export default {
       });
     },
 
+    showError(error) {
+      this.errorText = '';
+      let errorMessage = '';
+
+      for(let item in error.response.data)
+        for(let message of error.response.data[item])
+          errorMessage += `${item}: ${message} \n`;
+
+        this.errorText = errorMessage;
+        this.snackbar = true;
+    },
+
     editItem(item) {
       this.editedIndex = this.locations.indexOf(item)
       this.editedItem  = Object.assign({}, item)
@@ -260,8 +292,23 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.locations[this.editedIndex], this.editedItem)
+        // Edition
+        var newItem = this.editedItem;
+        var newItemIndex = this.editedIndex;
+        this.$instance.patch(`${this.api}${this.editedItem.id}/`, {
+          "name": this.editedItem.name,
+          "address": this.editedItem.address,
+          "longitude": this.editedItem.longitude,
+          "latitude": this.editedItem.latitude,
+        })
+        .then((response) => {
+          Object.assign(this.locations[newItemIndex], newItem)
+        })
+        .catch((error) => {
+          this.showError(error);
+        });
       } else {
+        // Addition
         var newItem = this.editedItem;
         this.$instance.post(this.api, {
           "name": this.editedItem.name,
@@ -271,6 +318,9 @@ export default {
         })
         .then((response) => {
           this.locations.push(newItem);
+        })
+        .catch((error) => {
+          this.showError(error);
         });
       }
       this.close()

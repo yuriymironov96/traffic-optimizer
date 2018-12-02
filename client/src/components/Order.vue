@@ -104,6 +104,22 @@
   </v-data-table>
 </v-flex>
 </v-layout>
+<v-snackbar
+      style="whiteSpace: pre-line"
+      v-model="snackbar"
+      :color="color"
+      multi-line
+      :timeout="timeout"
+    >
+      <p> {{ errorText }} </p>
+      <v-btn
+        dark
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
 </v-container>
 </template>
 
@@ -119,13 +135,17 @@ export default {
       }
     })
     .catch(function (error) {
-      console.error("Unable to get data" + error);
+      this.showError(error);
     });
   },
 
   data() {
     return {
       api: 'orders/parcels/',
+      snackbar: false,
+      color: '#C12828',
+      timeout: 5000,
+      errorText: '',
       dialog: false,
       search: '',
       headers : [
@@ -196,7 +216,7 @@ export default {
         }
       })
       .catch(function (error) {
-        console.error("Error from locations" + error);
+        console.log(error);
       });
     },
 
@@ -208,6 +228,7 @@ export default {
 
     deleteItem(item) {
       const index = this.orders.indexOf(item);
+
       if (confirm('Are you sure you want to delete this item?')) {
         this.orders.splice(index, 1);
         this.$instance.delete(`${this.api}${item.id}`);
@@ -222,11 +243,41 @@ export default {
       }, 300)
     },
 
+    showError(error) {
+      this.errorText = '';
+      let errorMessage = '';
+
+      for(let item in error.response.data)
+        for(let message of error.response.data[item])
+          errorMessage += `${item}: ${message} \n`;
+
+        this.errorText = errorMessage;
+        this.snackbar = true;
+    },
+
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.orders[this.editedIndex], this.editedItem)
-      } else {
+        // Edition
         var newItem = this.editedItem;
+        var newItemIndex = this.editedIndex;
+
+        this.$instance.patch(`${this.api}${this.editedItem.id}/`, {
+          "customer_name": this.editedItem.customer_name,
+          "customer_phone": this.editedItem.customer_phone,
+          "weight": this.editedItem.weight,
+          "departure_point": this.editedItem.departure_point,
+          "delivery_point": this.editedItem.delivery_point,
+        })
+        .then((response) => {
+          Object.assign(this.orders[newItemIndex], newItem)
+        })
+        .catch((error) => {
+          this.showError(error);
+        });
+      } else {
+        // Addition
+        var newItem = this.editedItem;
+
         this.$instance.post(this.api, {
           "customer_name": this.editedItem.customer_name,
           "customer_phone": this.editedItem.customer_phone,
@@ -236,6 +287,9 @@ export default {
         })
         .then((response) => {
           this.orders.push(newItem);
+        })
+        .catch((error) => {
+          this.showError(error);
         });
       }
       this.close()

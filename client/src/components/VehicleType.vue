@@ -109,6 +109,22 @@
   </v-data-table>
 </v-flex>
 </v-layout>
+<v-snackbar
+      style="whiteSpace: pre-line"
+      v-model="snackbar"
+      :color="color"
+      multi-line
+      :timeout="timeout"
+    >
+      <p> {{ errorText }} </p>
+      <v-btn
+        dark
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
 </v-container>
 </template>
 
@@ -131,6 +147,10 @@ export default {
   data() {
     return {
       api: 'vehicles/vehicles/',
+      snackbar: false,
+      color: '#C12828',
+      timeout: 5000,
+      errorText: '',
       dialog: false,
       search: '',
       headers : [
@@ -198,6 +218,18 @@ export default {
       });
     },
 
+    showError(error) {
+      this.errorText = '';
+      let errorMessage = '';
+
+      for(let item in error.response.data)
+        for(let message of error.response.data[item])
+          errorMessage += `${item}: ${message} \n`;
+
+        this.errorText = errorMessage;
+        this.snackbar = true;
+    },
+
     editItem(item) {
       this.editedIndex = this.vehicles.indexOf(item)
       this.editedItem  = Object.assign({}, item)
@@ -222,8 +254,25 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.vehicles[this.editedIndex], this.editedItem)
+        // Edition
+        var newItem = this.editedItem;
+        var newItemIndex = this.editedIndex;
+          this.$instance.patch(`${this.api}${this.editedItem.id}/`, {
+          "license_plate_number": this.editedItem.license_plate_number,
+          "model": this.editedItem.model,
+          "vendor": this.editedItem.vendor,
+          "max_load": this.editedItem.max_load,
+          "fuel_capacity": this.editedItem.fuel_capacity,
+          "fuel_consumption": this.editedItem.fuel_consumption
+        })
+        .then((response) => {
+          Object.assign(this.vehicles[newItemIndex], newItem)
+        })
+        .catch((error) => {
+          this.showError(error);
+        });
       } else {
+        // Addition
         var newItem = this.editedItem;
         this.$instance.post(this.api, {
           "license_plate_number": this.editedItem.license_plate_number,
@@ -235,6 +284,9 @@ export default {
         })
         .then((response) => {
           this.vehicles.push(newItem);
+        })
+        .catch((error) => {
+          this.showError(error);
         });
       }
       this.close()
