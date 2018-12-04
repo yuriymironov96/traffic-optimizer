@@ -1,7 +1,12 @@
 <template>
   <v-layout row wrap>
-    <v-flex xs10 mt-5>
-      <h1 class="display-2">Location</h1>
+    <v-flex xs2 mt-5>
+      <v-btn v-if="showBackBtn" block color="secondary" @click="() => this.$router.go(-1)">
+        Back
+      </v-btn>
+    </v-flex>
+    <v-flex xs8 mt-5>
+      <h1 class="display-2">{{getTitle}}</h1>
     </v-flex>
     <v-flex xs2 mt-5>
       <v-dialog v-model="dialog" max-width="500px">
@@ -72,25 +77,27 @@
         </v-tooltip>
       </template>
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-center">{{ props.item.address }}</td>
-        <td class="text-xs-center">{{ props.item.longitude }}</td>
-        <td class="text-xs-center">{{ props.item.latitude }}</td>
-        <td class="justify-center layout px-0">
-          <v-icon
-          small
-          class="mr-2"
-          @click="editItem(props.item)"
-          >
-          fas fa-edit
-        </v-icon>
-        <v-icon
-        small
-        @click="deleteItem(props.item)"
-        >
-        fas fa-trash
-      </v-icon>
-    </td>
+        <tr @click="onItemSelection(props.item)" :class="{selected: props.item.id === getSelectedItemId}">
+          <td class="text-xs-left">{{ props.item.name }}</td>
+          <td class="text-xs-center">{{ props.item.address }}</td>
+          <td class="text-xs-center">{{ props.item.longitude }}</td>
+          <td class="text-xs-center">{{ props.item.latitude }}</td>
+          <td class="justify-center layout px-0">
+            <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(props.item)"
+            >
+              fas fa-edit
+            </v-icon>
+            <v-icon
+                    small
+                    @click="deleteItem(props.item)"
+            >
+              fas fa-trash
+            </v-icon>
+          </td>
+        </tr>
   </template>
   <v-alert slot="no-results" :value="true" color="error"
   icon="fas fa-exclamation-triangle">
@@ -118,7 +125,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
+  props: ['onLocationSelection'],
   mounted() {
     this.$instance.get(this.api)
     .then((response) => {
@@ -132,7 +141,6 @@ export default {
       console.error("Unable to get data" + error);
     });
   },
-
   data() {
     return {
       api: 'locations/locations/',
@@ -229,8 +237,29 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['startLocation','endLocation']),
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    },
+    showBackBtn() {
+      return this.$route.name === 'historyPage';
+    },
+    getSelectedItemId() {
+      if (this.$route.name.includes('start')) {
+          return this.startLocation && this.startLocation.id;
+      }
+      if (this.$route.name.includes('end')) {
+          return this.endLocation && this.endLocation.id;
+      }
+    },
+    getTitle() {
+      if (this.$route.name.includes('start')) {
+          return 'Select start location';
+      }
+      if (this.$route.name.includes('end')) {
+          return 'Select end location';
+      }
+      return 'Locations';
     }
   },
   watch   : {
@@ -238,7 +267,6 @@ export default {
       val || this.close()
     }
   },
-
   methods: {
     fillData() {
       this.$instance.post(this.api, {
@@ -324,10 +352,17 @@ export default {
         });
       }
       this.close()
+    },
+
+    onItemSelection(item) {
+        this.onLocationSelection && this.onLocationSelection(item);
     }
   }
 }
 </script>
 
 <style scoped>
+  .selected {
+    background: lightblue;
+  }
 </style>

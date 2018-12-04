@@ -25,7 +25,7 @@
     name: "MainPage",
     methods: {
       createRequest() {
-        this.$router.push({name: 'newOrderPage'})
+        this.$router.push({name: 'startLocation'})
       },
       openRequest() {
         this.$router.push({name: 'orderPage'})

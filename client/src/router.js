@@ -4,6 +4,8 @@ import MainPage from './pages/MainPage.vue';
 import HistoryPage from './pages/HistoryPage.vue';
 import NewOrderPage from './pages/NewOrderPage.vue';
 import OrderPage from './pages/OrderPage.vue';
+import startLocation from './pages/startLocation.vue';
+import endLocation from './pages/endLocation.vue';
 
 Vue.use(Router);
 
@@ -29,6 +31,16 @@ export default new Router(
         path     : '/orderPage',
         name     : 'orderPage',
         component: OrderPage
+      },
+      {
+        path     : '/startLocation',
+        name     : 'startLocation',
+        component: startLocation
+      },
+      {
+        path     : '/endLocation',
+        name     : 'endLocation',
+        component: endLocation
       }
     ]
   }

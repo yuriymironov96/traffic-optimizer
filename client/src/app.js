@@ -4,6 +4,7 @@ import Vuetify from 'vuetify';
 import axios from 'axios';
 import App from './App.vue';
 import router from './router.js'
+import store from './store.js'
 import '../assets/app.styl';
 
 const instance = axios.create({
@@ -18,7 +19,8 @@ Vue.use(Vuetify, {
 Vue.prototype.$instance = instance;
 
 new Vue({
-          el    : '#app',
-          router,
-          render: h => h(App)
-        });
+  el    : '#app',
+  router,
+  store,
+  render: h => h(App)
+ });
