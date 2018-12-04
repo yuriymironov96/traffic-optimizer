@@ -27,8 +27,13 @@
     export default {
         name: "startLocation",
         components: {Location},
+        beforeMount() {
+            if (!this.order) {
+                this.$router.push('/');
+            }
+        },
         computed: {
-            ...mapGetters(['startLocation'])
+            ...mapGetters(['order', 'startLocation'])
         },
         methods: {
             ...mapMutations(['setStartLocation']),
@@ -36,7 +41,7 @@
                 this.setStartLocation(location);
             },
             onBack() {
-                this.$router.push('/')
+                this.$router.push('/order')
             },
             onNext() {
                 this.$router.push('/endLocation')

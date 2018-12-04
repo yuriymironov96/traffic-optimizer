@@ -8,13 +8,15 @@ export default new Vuex.Store({
         startLocation: null,
         endLocation: null,
         vehicle: null,
-        orderId: null
+        orderId: null,
+        order: null
     },
     getters: {
         startLocation: (state) => state.startLocation,
         endLocation: (state) => state.endLocation,
         vehicle: (state) => state.vehicle,
-        orderId:(state) => state.orderId
+        orderId:(state) => state.orderId,
+        order:(state) => state.order
     },
     mutations: {
         setStartLocation (state, location) {
@@ -29,10 +31,14 @@ export default new Vuex.Store({
         setOrderId (state, orderId) {
             state.orderId = orderId;
         },
+        setOrder (state, order) {
+            state.order = order;
+        },
         clearStore(state) {
             state.startLocation = null;
             state.endLocation = null;
             state.vehicle = null;
+            state.order = null;
         }
     }
 })

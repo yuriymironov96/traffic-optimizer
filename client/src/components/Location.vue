@@ -10,7 +10,7 @@
     </v-flex>
     <v-flex xs2>
       <v-dialog v-model="dialog" max-width="500px">
-        <v-btn slot="activator" color="primary" dark class="mb-2">Add Location
+        <v-btn slot="activator" block color="primary" dark class="mb-2">Add Location
         </v-btn>
         <v-card>
           <v-card-title>
@@ -62,7 +62,7 @@
     <v-flex xs12 mt-5>
       <v-data-table
       :headers="headers"
-      :items="locations"
+      :items="getLocations"
       class="elevation-1"
       :search="search"
       >
@@ -80,8 +80,8 @@
         <tr @click="onItemSelection(props.item)" :class="{selectedRow: props.item.id === getSelectedItemId}">
           <td class="text-xs-left">{{ props.item.name }}</td>
           <td class="text-xs-center">{{ props.item.address }}</td>
-          <td class="text-xs-center">{{ props.item.longitude }}</td>
-          <td class="text-xs-center">{{ props.item.latitude }}</td>
+          <td class="text-xs-center">{{ parseFloat(props.item.longitude).toFixed(2) }}</td>
+          <td class="text-xs-center">{{ parseFloat(props.item.latitude).toFixed(2) }}</td>
           <td class="justify-center layout px-0">
             <v-icon
                     small
@@ -260,6 +260,12 @@ export default {
           return 'Select end location';
       }
       return 'Locations';
+    },
+    getLocations() {
+        if (this.$route.name.includes('end')) {
+            return this.locations.filter((location) => location.id !== this.startLocation.id)
+        }
+        return this.locations;
     }
   },
   watch   : {

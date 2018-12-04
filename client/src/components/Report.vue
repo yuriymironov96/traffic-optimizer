@@ -17,6 +17,7 @@
             <v-card-text class="text-xs-left">
                 <p><span class="font-weight-bold">From: </span> {{`${from.name} ${from.address}`}}</p>
                 <p><span class="font-weight-bold">To: </span> {{`${to.name} ${to.address}`}}</p>
+                <p><span class="font-weight-bold">Weight: </span> {{order.weight}}</p>
                 <p><span class="font-weight-bold">Transport: </span> {{`${vehicle.model} ${vehicle.vendor}`}}</p>
                 <p><span class="font-weight-bold">Status: </span> Finished</p>
 

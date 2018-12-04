@@ -7,7 +7,7 @@
             </v-flex>
             <v-flex xs2>
                 <v-dialog v-model="dialog" max-width="500px">
-                    <v-btn slot="activator" color="primary" dark class="mb-2">Add vehicle
+                    <v-btn slot="activator" block color="primary" dark class="mb-2">Add vehicle
                     </v-btn>
                     <v-card>
                         <v-card-title>
@@ -86,10 +86,10 @@
                             :class="{selectedRow: props.item.id === getSelectedItemId}">
                             <td class="text-xs-left">{{ props.item.model }}</td>
                             <td class="text-xs-center">{{ props.item.vendor }}</td>
+                            <td class="text-xs-center">{{ parseFloat(props.item.max_load).toFixed(2) }} </td>
                             <td class="text-xs-center">{{ props.item.license_plate_number }}</td>
-                            <td class="text-xs-center">{{ props.item.max_load }}</td>
-                            <td class="text-xs-center">{{ props.item.fuel_capacity }}</td>
-                            <td class="text-xs-center">{{ props.item.fuel_consumption }}</td>
+                            <td class="text-xs-center">{{ parseFloat(props.item.fuel_capacity).toFixed(2) }}</td>
+                            <td class="text-xs-center">{{ parseFloat(props.item.fuel_consumption).toFixed(2) }}</td>
                             <td class="justify-center layout px-0">
                                 <v-icon
                                         small

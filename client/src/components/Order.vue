@@ -7,7 +7,7 @@
             </v-flex>
             <v-flex xs2>
                 <v-dialog v-model="dialog" max-width="500px">
-                    <v-btn slot="activator" color="primary" dark class="mb-2">Add Order
+                    <v-btn slot="activator" block color="primary" dark class="mb-2">Add Order
                     </v-btn>
                     <v-card>
                         <v-card-title>
