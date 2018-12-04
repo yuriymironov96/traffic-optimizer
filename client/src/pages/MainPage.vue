@@ -1,16 +1,23 @@
 <template>
-  <v-layout mt-5>
-    <v-flex xs5>
+  <v-slide-x-transition>
+    <v-layout row wrap mt-5>
+    <v-flex xs12>
       <v-btn block color="secondary" @click="createRequest">
         Create new transportation request
       </v-btn>
     </v-flex>
-    <v-flex xs5 offset-xs2>
+    <v-flex xs12>
+      <v-btn block color="secondary" @click="openRequest">
+        Open transportation request
+      </v-btn>
+    </v-flex>
+    <v-flex xs12>
       <v-btn block color="secondary" @click="viewHistory">
         View History
       </v-btn>
     </v-flex>
   </v-layout>
+  </v-slide-x-transition>
 </template>
 
 <script>
@@ -19,6 +26,9 @@
     methods: {
       createRequest() {
         this.$router.push({name: 'newOrderPage'})
+      },
+      openRequest() {
+        this.$router.push({name: 'orderPage'})
       },
       viewHistory() {
         this.$router.push({name: 'historyPage'})

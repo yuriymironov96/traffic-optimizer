@@ -1,15 +1,20 @@
 <template>
   <v-toolbar app>
     <v-spacer />
-    <v-flex xs3 mt-3>
-      <p class="display-1 font-weight-black">Traffic Optimizer</p>
+    <v-flex mt-3>
+      <p class="display-1 font-weight-black text-xs-right" @click="goHome">Traffic Optimizer</p>
     </v-flex>
   </v-toolbar>
 </template>
 
 <script>
   export default {
-    name: "Header"
+    name: "Header",
+    methods: {
+      goHome() {
+          this.$router.push('/')
+      }
+    }
   }
 </script>
 

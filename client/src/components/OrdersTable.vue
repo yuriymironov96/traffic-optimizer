@@ -1,0 +1,55 @@
+<template>
+    <v-data-table
+            :headers="headers"
+            :items="orders"
+            class="elevation-1"
+    >
+        <template slot="headerCell" slot-scope="props">
+            <v-tooltip bottom>
+            <span slot="activator">
+              {{ props.header.text }}
+            </span>
+                <span>
+              {{ props.header.text }}
+            </span>
+            </v-tooltip>
+        </template>
+        <template slot="items" slot-scope="props">
+            <tr @click="selectOrder(props)" :key="props.item.id">
+                <td class="text-xs-left">{{ props.item.customer_name }}</td>
+                <td class="text-xs-center">{{ props.item.customer_phone }}</td>
+                <td class="text-xs-center">{{ props.item.weight }}</td>
+                <td class="text-xs-center">{{ props.item.departure_point }}</td>
+                <td class="text-xs-center">{{ props.item.delivery_point }}</td>
+            </tr>
+        </template>
+        <v-alert slot="no-results" :value="true" color="error" icon="fas fa-exclamation-triangle">
+            No data available
+        </v-alert>
+    </v-data-table>
+</template>
+<script>
+    export default {
+        name: 'OrdersTable',
+        props: [
+            'orders',
+            'selectOrder'
+        ],
+        data() {
+            return {
+                headers : [
+                    {
+                        text    : 'Customer`s name',
+                        align   : 'left',
+                        sortable: true,
+                        value   : 'customer_name'
+                    },
+                    {text: 'Customer`s phone', value: 'customer_phone', align: 'center'},
+                    {text: 'Weight, kg', value: 'weight', align: 'center'},
+                    {text: 'Departure point', value: 'departure_point', align: 'center'},
+                    {text: 'Delivery point', value: 'delivery_point', align: 'center'}
+                ]
+            }
+        }
+    }
+</script>

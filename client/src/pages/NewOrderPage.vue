@@ -1,25 +1,27 @@
 <template>
-  <v-expansion-panel class="mt-5" popout>
-    <v-expansion-panel-content
-        v-for="(item,i) in panels"
-        :key="i"
-        :value="panel[i]"
-        :disabled="(i > currentPanelIndex + 1)"
-    >
-      <div slot="header" @click="onPanelClick(i)">
-        <h2 class="headline">
-          {{item.header}}
-        </h2>
-      </div>
-      <v-card>
-        <v-layout pa-5>
-          <location v-if="item.componentName === 'Location'"/>
-          <vehicle-type v-if="item.componentName === 'VehicleType'"/>
-          <order v-if="item.componentName === 'Order'"/>
-        </v-layout>
-      </v-card>
-    </v-expansion-panel-content>
-  </v-expansion-panel>
+  <v-slide-x-transition>
+    <v-expansion-panel class="mt-5" popout>
+      <v-expansion-panel-content
+          v-for="(item,i) in panels"
+          :key="i"
+          :value="panel[i]"
+          :disabled="(i > currentPanelIndex + 1)"
+      >
+        <div slot="header" @click="onPanelClick(i)">
+          <h2 class="headline">
+            {{item.header}}
+          </h2>
+        </div>
+        <v-card>
+          <v-layout pa-5>
+            <location v-if="item.componentName === 'Location'"/>
+            <vehicle-type v-if="item.componentName === 'VehicleType'"/>
+            <order v-if="item.componentName === 'Order'"/>
+          </v-layout>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-slide-x-transition>
 </template>
 
 <script>
