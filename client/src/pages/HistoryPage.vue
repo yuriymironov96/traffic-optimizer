@@ -1,13 +1,13 @@
 <template>
   <v-slide-x-transition>
     <v-layout wrap>
-      <v-flex xs12>
+      <v-flex xs12 mt-5>
         <Location />
       </v-flex>
-      <v-flex xs12>
+      <v-flex xs12 mt-5>
         <VehicleType />
       </v-flex>
-      <v-flex xs12>
+      <v-flex xs12 my-5>
         <Order />
       </v-flex>
     </v-layout>

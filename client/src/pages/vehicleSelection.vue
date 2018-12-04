@@ -1,6 +1,6 @@
 <template>
     <v-slide-x-transition>
-        <v-layout mt-5 row wrap justify-space-between>
+        <v-layout row wrap justify-space-between>
             <v-flex xs12 sm3>
                 <v-btn block color="secondary" @click="onBack">
                     Back
@@ -13,7 +13,7 @@
                 </v-btn>
             </v-flex>
 
-            <v-flex xs12 mb-5>
+            <v-flex xs12 mb-5 mt-4>
                 <VehicleType :onVehicleSelection="setCurrentVehicle" />
             </v-flex>
         </v-layout>
@@ -43,7 +43,7 @@
                 this.$router.push('/')
             },
             onNext() {
-                this.$router.push('/orderSelection')
+                this.$router.push('/order')
             }
         }
     }

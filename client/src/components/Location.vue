@@ -1,14 +1,14 @@
 <template>
   <v-layout row wrap>
-    <v-flex xs2 mt-5>
+    <v-flex xs2>
       <v-btn v-if="showBackBtn" block color="secondary" @click="() => this.$router.go(-1)">
         Back
       </v-btn>
     </v-flex>
-    <v-flex xs8 mt-5>
+    <v-flex xs8>
       <h1 class="display-2">{{getTitle}}</h1>
     </v-flex>
-    <v-flex xs2 mt-5>
+    <v-flex xs2>
       <v-dialog v-model="dialog" max-width="500px">
         <v-btn slot="activator" color="primary" dark class="mb-2">Add Location
         </v-btn>

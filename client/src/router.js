@@ -7,6 +7,7 @@ import OrderPage from './pages/OrderPage.vue';
 import startLocation from './pages/startLocation.vue';
 import endLocation from './pages/endLocation.vue';
 import vehicleSelection from './pages/vehicleSelection.vue';
+import orderSelection from './pages/orderSelection.vue';
 
 Vue.use(Router);
 
@@ -47,6 +48,11 @@ export default new Router(
         path     : '/vehicle',
         name     : 'vehicle',
         component: vehicleSelection
+      },
+      {
+        path     : '/order',
+        name     : 'order',
+        component: orderSelection
       }
     ]
   }

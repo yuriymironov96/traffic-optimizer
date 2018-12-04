@@ -35,6 +35,9 @@
     text-align center
     color #2c3e50
 
+  #app
+    background #e2dcdc
+
     .container
       margin-top 80px
 </style>

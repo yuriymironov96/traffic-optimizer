@@ -24,6 +24,7 @@
 <script>
     import Report from "../components/Report.vue";
     import OrdersTable from "../components/OrdersTable.vue";
+    import { mapGetters, mapMutations } from 'vuex';
 
     export default {
         components: {Report, OrdersTable},
@@ -31,7 +32,6 @@
             this.$instance.get('orders/parcels/')
                 .then((response) => {
                     this.orders = response.data.results;
-                    console.log(response.data.results, 'response.data.results');
                 })
                 .catch(function (error) {
                     this.showError(error);
@@ -48,7 +48,16 @@
                     this.from = response.data.results[0];
                     this.to = response.data.results[1];
                 });
-            setTimeout(() => this.loadingOrders = false, 1000);
+            setTimeout(() => {
+                this.loadingOrders = false;
+                if (this.orderId) {
+                    this.selectOrder({
+                        item: {
+                            id: this.orderId
+                        }
+                    })
+                }
+            }, 1000);
         },
         data() {
             return {
@@ -61,10 +70,14 @@
                 loadingReport: false
             }
         },
+        computed: {
+            ...mapGetters(['orderId']),
+        },
         methods: {
+            ...mapMutations(['setOrderId']),
             selectOrder(order) {
                 this.currentOrder = this.orders.find((o) => o.id === order.item.id);
-                this.loadingReport = true;
+                this.setOrderId(this.currentOrder.id);
                 setTimeout(() => this.loadingReport = false, 1000);
             }
         }

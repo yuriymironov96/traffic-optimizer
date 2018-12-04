@@ -1,10 +1,11 @@
 <template>
-    <v-container mt-5>
+    <div>
         <v-layout row wrap>
-            <v-flex xs10 mt-5>
+            <v-flex xs2/>
+            <v-flex xs8>
                 <h1 class="display-2">{{getTitle}}</h1>
             </v-flex>
-            <v-flex xs2 mt-5>
+            <v-flex xs2>
                 <v-dialog v-model="dialog" max-width="500px">
                     <v-btn slot="activator" color="primary" dark class="mb-2">Add vehicle
                     </v-btn>
@@ -54,7 +55,7 @@
                     </v-card>
                 </v-dialog>
             </v-flex>
-            <v-flex xs12 mt-5>
+            <v-flex xs12>
                 <v-text-field
                         v-model="search"
                         append-icon="fas fa-search"
@@ -128,7 +129,7 @@
                 Close
             </v-btn>
         </v-snackbar>
-    </v-container>
+    </div>
 </template>
 
 <script>
@@ -207,7 +208,7 @@
             },
             getTitle() {
                 if (this.$route.name.includes('vehicle')) {
-                    return 'Select vehicle Type';
+                    return 'Select vehicle type';
                 }
                 return 'Vehicle Type';
             }
