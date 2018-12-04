@@ -77,7 +77,7 @@
         </v-tooltip>
       </template>
       <template slot="items" slot-scope="props">
-        <tr @click="onItemSelection(props.item)" :class="{selected: props.item.id === getSelectedItemId}">
+        <tr @click="onItemSelection(props.item)" :class="{selectedRow: props.item.id === getSelectedItemId}">
           <td class="text-xs-left">{{ props.item.name }}</td>
           <td class="text-xs-center">{{ props.item.address }}</td>
           <td class="text-xs-center">{{ props.item.longitude }}</td>
@@ -353,7 +353,6 @@ export default {
       }
       this.close()
     },
-
     onItemSelection(item) {
         this.onLocationSelection && this.onLocationSelection(item);
     }
@@ -361,8 +360,8 @@ export default {
 }
 </script>
 
-<style scoped>
-  .selected {
+<style>
+  .selectedRow {
     background: lightblue;
   }
 </style>
