@@ -8,6 +8,7 @@ import startLocation from './pages/startLocation.vue';
 import endLocation from './pages/endLocation.vue';
 import vehicleSelection from './pages/vehicleSelection.vue';
 import orderSelection from './pages/orderSelection.vue';
+import mapComponent from './components/MapComponent.vue';
 
 Vue.use(Router);
 
@@ -53,6 +54,11 @@ export default new Router(
         path     : '/order',
         name     : 'order',
         component: orderSelection
+      },
+      {
+        path     : '/map',
+        name     : 'map',
+        component: mapComponent
       }
     ]
   }
