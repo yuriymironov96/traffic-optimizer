@@ -18,14 +18,18 @@ class RouteViewSet(viewsets.ViewSet):
     def list(self, request):
         parcels = Parcel.objects.all()
 
-        origin = (parcels[0].departure_point.latitude,
-                  parcels[0].departure_point.longitude)
-        waypoints = []
+        origin = {
+            "lat" : parcels[0].departure_point.latitude,
+            "lng": parcels[0].departure_point.longitude
+        }
 
+        waypoints = []
         for parcel in parcels:
-            waypoints.append((parcel.delivery_point.latitude,
-                              parcel.delivery_point.longitude))
-            print(parcel.delivery_point.address)
+            waypoint = {
+                "lat" : parcel.delivery_point.latitude,
+                "lng": parcel.delivery_point.longitude
+            }
+            waypoints.append(waypoint)
 
         google_maps_api_key = "AIzaSyAU-AAp4_uaDAeDzzhdyKZLKCOYaQwapdQ"
         gmaps = googlemaps.Client(key=google_maps_api_key)
