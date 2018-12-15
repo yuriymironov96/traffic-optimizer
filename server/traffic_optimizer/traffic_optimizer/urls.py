@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^api/locations/', include('locations.urls')),
     url(r'^api/orders/', include('orders.urls')),
     url(r'^api/vehicles/', include('vehicles.urls')),
+    url(r'^api/routes/', include('routes.urls'))
 ]
