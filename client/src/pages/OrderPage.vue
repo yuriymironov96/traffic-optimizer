@@ -9,7 +9,7 @@
             />
             <OrdersTable v-if="!loadingOrders" :orders="orders" :selectOrder="selectOrder" />
         </v-flex>
-        <MapComponent />
+
         <v-flex xs12 my-4 v-if="!!currentOrder">
             <v-progress-circular
                     v-if="loadingReport"

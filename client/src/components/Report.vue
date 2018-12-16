@@ -2,11 +2,7 @@
     <v-slide-x-transition>
 
         <v-card >
-            <!-- <v-img
-                    src="https://cnet2.cbsistatic.com/img/H_zPLL8-QTZOLxJvgHQ1Jkz0EgY=/830x467/2013/07/10/f0bcef02-67c2-11e3-a665-14feb5ca9861/maps_routemap.png"
-                    height="200px"
-            >
-            </v-img> -->
+            <MapComponent :locations="[fromCoord, toCoord]" :predefined="true"/>
             <v-card-title primary-title>
                 <div class="text-xs-left">
                     <div class="headline"><span class="font-weight-bold">Customer: </span>{{order.customer_name}}</div>
@@ -26,7 +22,10 @@
     </v-slide-x-transition>
 </template>
 <script>
+  import MapComponent from "./MapComponent.vue";
+
     export default {
+      components: {MapComponent},
         name: 'Report',
         props: {
             from: {},
@@ -34,6 +33,18 @@
             order: {},
             to: {},
             vehicle: {}
+        },
+        data () {
+            return {
+              fromCoord: {
+                latitude: 50.440638,
+                longitude: 30.429656
+              },
+              toCoord: {
+                latitude: 50.450940,
+                longitude: 30.466568
+              }
+            }
         }
     }
 </script>

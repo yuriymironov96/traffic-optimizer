@@ -1,121 +1,154 @@
 <template>
-  <v-container mt-5>
-    <v-flex xs10 mt-5>
-      <div id="map"></div>
-      <!-- <v-btn block color="secondary" @click="calculateRoute" :disabled="calculationOn == 0">
-        Calculate
-      </v-btn> -->
-    </v-flex>
-  </v-container>
+  <div id="map"></div>
+  <!-- <v-btn block color="secondary" @click="calculateRoute" :disabled="calculationOn == 0">
+    Calculate
+  </v-btn> -->
 </template>
 
 <script>
-export default {
-  mounted: function() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 50.45466, lng: 30.5238},
-      zoom: 11
-    });
-
-    // google.maps.event.addListener(map, 'click', (event) => {
-    //
-    //   if (!this.markersArray.start) {
-    //     this.markersArray.start = addMarker(event.latLng, map, "Start Marker");
-    //   }
-    //   else if (!this.markersArray.end) {
-    //     this.markersArray.end = addMarker(event.latLng, map, "End Marker");
-    //   } else {
-    //     this.markersArray.end.setMap(null);
-    //     this.markersArray.end = addMarker(event.latLng, map, "End Marker");
-    //   }
-    //
-    //   this.activateCalculation();
-    // });
-
-    function addMarker(location, map, context) {
-      var marker = new google.maps.Marker({
-        position: location,
-        map: map
+  export default {
+    props  : ['locations', 'predefined'],
+    mounted: function () {
+      let map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 50.45466, lng: 30.5238},
+        zoom  : 11
       });
 
-      google.maps.event.addListener(marker, 'click', function() {
-      // Open an info window when the marker is clicked on, containing the text
-      // of the step.
-        let stepDisplay = new google.maps.InfoWindow;
-        stepDisplay.setContent(context);
-        stepDisplay.open(map, marker);
-      });
+      if (this.predefined) {
+        if (this.locations[0]) {
+          this.markersArray.start = this.getCoordinatesFromLocation(this.locations[0]);
+          // const startCoordinates  = this.getCoordinatesFromLocation(this.locations[0]);
+          // this.markersArray.start = this.addMarker(
+          //   startCoordinates,
+          //   map,
+          //   "Start"
+          // );
+        }
+        if (this.locations[1]) {
+          this.markersArray.end = this.getCoordinatesFromLocation(this.locations[1]);
+          // const endCoordinates  = this.getCoordinatesFromLocation(this.locations[1]);
+          // this.markersArray.end = this.addMarker(
+          //   endCoordinates,
+          //   map,
+          //   "End"
+          // );
+        }
+        this.activateCalculation();
+      } /*else {
+        google.maps.event.addListener(map, 'click', (event) => {
+          console.log(event.latLng, 'event');
+          if (!this.markersArray.start) {
+            this.markersArray.start = this.addMarker(
+              event.latLng,
+              map,
+              "Start Marker"
+            );
+          }
+          else if (!this.markersArray.end) {
+            this.markersArray.end = this.addMarker(
+              event.latLng,
+              map,
+              "End Marker"
+            );
+          } else {
+            this.markersArray.end.setMap(null);
+            this.markersArray.end = this.addMarker(
+              event.latLng,
+              map,
+              "End Marker"
+            );
+          }
 
-      return marker;
-    }
-
-    this.map = map;
-    this.calculateRoute();
-  },
-  data() {
-    return {
-      map: null,
-      markersArray: {
-        start: null,
-        end: null
-      },
-      calculationOn: false,
-      recalculation: false,
-    }
-  },
-  methods: {
-    activateCalculation() {
-      if (this.markersArray.start && this.markersArray.end)
-      this.calculationOn = true;
-      else {
-        this.calculationOn = false;
+          this.activateCalculation();
+        });
+      }*/
+      this.map = map;
+      this.calculateAndDisplayRoute();
+    },
+    data() {
+      return {
+        map          : null,
+        markersArray : {
+          start: null,
+          end  : null
+        },
+        calculationOn: false,
+        recalculation: false
       }
     },
+    methods: {
+      activateCalculation() {
+        if (this.markersArray.start && this.markersArray.end)
+          this.calculationOn = true;
+        else {
+          this.calculationOn = false;
+        }
+      },
 
-    calculateRoute() {
-      var directionsService = new google.maps.DirectionsService;
-      var directionsDisplay = new google.maps.DirectionsRenderer({map: this.map});
-      var stepDisplay = new google.maps.InfoWindow;
+      calculateRoute() {
+        let directionsService = new google.maps.DirectionsService;
+        let directionsDisplay = new google.maps.DirectionsRenderer({map: this.map});
+        let stepDisplay       = new google.maps.InfoWindow;
 
-      this.$instance.get('routes/routes/')
+        calculateAndDisplayRoute(
+          directionsDisplay,
+          directionsService,
+          this.markersArray,
+          stepDisplay,
+          response.data.route.waypoints,
+          map
+        );
+
+        this.$instance.get('routes/routes/')
           .then((response) => {
             this.markersArray.start = response.data.route.origin;
-            this.markersArray.end = response.data.route.destination;
+            this.markersArray.end   = response.data.route.destination;
             calculateAndDisplayRoute(
-              directionsDisplay, directionsService, this.markersArray, stepDisplay, response.data.route.waypoints, map);
+              directionsDisplay,
+              directionsService,
+              this.markersArray,
+              stepDisplay,
+              response.data.route.waypoints,
+              map
+            );
           })
-          .catch(function(error) {
-              console.log(error);
+          .catch(function (error) {
+            console.log(error);
           });
 
-
-      function calculateAndDisplayRoute(directionsDisplay, directionsService,
-        markerArray, stepDisplay, waypoints, map) {
+        function calculateAndDisplayRoute(
+          directionsDisplay,
+          directionsService,
+          markerArray,
+          stepDisplay,
+          waypoints,
+          map
+        ) {
 
           let waypts = [];
           for (let item of waypoints) {
-              waypts.push({
-                location: {
-                  lat: item.lat,
-                  lng: item.lng
-                },
-                stopover: true
-              });
+            waypts.push({
+                          location: {
+                            lat: item.lat,
+                            lng: item.lng
+                          },
+                          stopover: true
+                        });
           }
 
           directionsService.route({
-            origin: {
-              lat: markerArray.start.lat,
-              lng: markerArray.start.lng
-            },
-            destination: {
-              lat: markerArray.end.lat,
-              lng: markerArray.end.lng
-            },
-            waypoints: waypts,
-            optimizeWaypoints: true,
-            travelMode: 'DRIVING'
-          }, function(response, status) {
+                                    origin           : {
+                                      lat: markerArray.start.lat,
+                                      lng: markerArray.start.lng
+                                    },
+                                    destination      : {
+                                      lat: markerArray.end.lat,
+                                      lng: markerArray.end.lng
+                                    },
+                                    waypoints        : waypts,
+                                    optimizeWaypoints: true,
+                                    travelMode       : 'DRIVING'
+                                  }, function (response, status) {
             if (status === 'OK') {
               //debugger;
               //console.log(response.request.origin.location.lat());
@@ -129,20 +162,112 @@ export default {
         }
 
         function showSteps(response, stepDisplay, map) {
-          google.maps.event.addListener(response.request.destination, 'click', function() {
-            stepDisplay.setContent("End point");
-            stepDisplay.open(map, marker);
-          });
+          google.maps.event.addListener(
+            response.request.destination,
+            'click',
+            function () {
+              stepDisplay.setContent("End point");
+              stepDisplay.open(map, marker);
+            }
+          );
         }
+
         this.calculationOn = false;
-      }
+      },
+
+      addMarker(location, map, context) {
+        let marker = new google.maps.Marker({
+                                              position: location,
+                                              map     : map
+                                            });
+
+        google.maps.event.addListener(marker, 'click', function () {
+          // Open an info window when the marker is clicked on, containing the text
+          // of the step.
+          let stepDisplay = new google.maps.InfoWindow;
+          stepDisplay.setContent(context);
+          stepDisplay.open(map, marker);
+        });
+
+        return marker;
+      },
+
+      getCoordinatesFromLocation(location) {
+        // return new google.maps.LatLng({lat: location.latitude, lng: location.longitude});
+        return {
+          lat: location.latitude,
+          lng: location.longitude
+        }
+      },
+
+      calculateAndDisplayRoute() {
+        let directionsService = new google.maps.DirectionsService;
+        let directionsDisplay = new google.maps.DirectionsRenderer({map: this.map});
+        let stepDisplay       = new google.maps.InfoWindow;
+
+        console.log({
+                      lat: this.markersArray.start.lat,
+                      lng: this.markersArray.start.lng
+                    }, 'start');
+        console.log({
+                      lat: this.markersArray.end.lat,
+                      lng: this.markersArray.end.lng
+                    }, 'end');
+        directionsService.route({
+                                  origin           : {
+                                    lat: this.markersArray.start.lat,
+                                    lng: this.markersArray.start.lng
+                                },
+                                  destination      : {
+                                    lat: this.markersArray.end.lat,
+                                    lng: this.markersArray.end.lng
+                                  },
+                                  // origin        : {
+                                  //   lat : 50.440638,
+                                  //   lng: 30.429656
+                                  // },
+                                  // destination          : {
+                                  //   lat : 50.450940,
+                                  //   lng: 30.466568
+                                  // },
+                                  optimizeWaypoints: true,
+                                  travelMode       : 'DRIVING'
+                                }, function (response, status) {
+          if (status === 'OK') {
+            //debugger;
+            //console.log(response.request.origin.location.lat());
+            //console.log(response.request.destination.location.lat());
+            directionsDisplay.setDirections(response);
+            // this.showSteps(response, stepDisplay);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+        this.calculationOn = false;
+      },
+      // showSteps(directionResult, stepDisplay) {
+      //   let markers = [...this.markersArray];
+      //   let myRoute = directionResult.routes[0].legs[0];
+      //   for (var i = 0; i < myRoute.steps.length; i++) {
+      //     var marker = markers[i] = markers[i] || new google.maps.Marker;
+      //     marker.setMap(this.map);
+      //     marker.setPosition(myRoute.steps[i].start_location);
+      //
+      //     google.maps.event.addListener(marker, 'click', function () {
+      //       // Open an info window when the marker is clicked on, containing the text
+      //       // of the step.
+      //       stepDisplay.setContent(myRoute.steps[i].instructions);
+      //       stepDisplay.open(this.map, marker);
+      //     });
+      //   }
+      // }
     }
   }
 </script>
 
 <style scoped>
-#map {
-  height: 400px;
-  width: 100%;
-}
+  #map {
+    height : 200px;
+    width  : 100%;
+  }
 </style>
