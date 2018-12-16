@@ -16,41 +16,39 @@
             </v-card-title>
 
             <v-card-text>
-              <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm6 px-2>
                     <v-text-field v-model="editedItem.model"
                                   label="Model"></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm6 px-2>
                     <v-text-field v-model="editedItem.vendor"
                                   label="Vendor"></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm6 px-2>
                     <v-text-field v-model="editedItem.max_load"
                                   label="Max capacity"></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm6 px-2>
                     <v-text-field v-model="editedItem.fuel_capacity"
                                   label="Fuel Capacity"></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm6 px-2>
                     <v-text-field v-model="editedItem.fuel_consumption"
                                   label="Fuel Consumption"></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm6 md4>
+                  <v-flex xs12 sm6 px-2>
                     <v-text-field v-model="editedItem.license_plate_number"
                                   label="Plate number"></v-text-field>
                   </v-flex>
                 </v-layout>
-              </v-container>
             </v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click.native="close">Cancel
               </v-btn>
-              <v-btn color="blue darken-1" flat @click.native="save">Save
+              <v-btn color="blue darken-1" flat @click.native="save" :disabled="!saveEnabled">Save
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -214,6 +212,12 @@
           return 'Select vehicle type';
         }
         return 'Vehicle Type';
+      },
+      saveEnabled() {
+        const {model, vendor, license_plate_number} = this.editedItem;
+        return model
+          && vendor
+          && license_plate_number;
       }
     },
     watch   : {
