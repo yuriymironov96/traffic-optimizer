@@ -278,15 +278,15 @@ export default {
       this.$instance.post(this.api, {
         "name": 'Street #1',
         "address": 'st. Somewhere',
-        "longitude": 26.43,
-        "latitude": -50.02,
+        "longitude": 30.429656,
+        "latitude": 50.440638,
       });
 
       this.$instance.post(this.api, {
         "name": 'Street #2',
         "address": 'st. Anywhere',
-        "longitude": 76.03,
-        "latitude": -44.28,
+        "longitude": 30.466568,
+        "latitude": 50.450940,
       });
     },
 

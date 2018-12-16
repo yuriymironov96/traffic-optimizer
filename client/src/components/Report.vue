@@ -2,7 +2,7 @@
     <v-slide-x-transition>
 
         <v-card >
-            <MapComponent :locations="[fromCoord, toCoord]" :predefined="true"/>
+            <MapComponent :locations="[from, to]" :predefined="true"/>
             <v-card-title primary-title>
                 <div class="text-xs-left">
                     <div class="headline"><span class="font-weight-bold">Customer: </span>{{order.customer_name}}</div>

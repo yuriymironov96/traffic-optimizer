@@ -62,6 +62,7 @@
           this.activateCalculation();
         });
       }*/
+
       this.map = map;
       this.calculateAndDisplayRoute();
     },
@@ -195,15 +196,15 @@
       getCoordinatesFromLocation(location) {
         // return new google.maps.LatLng({lat: location.latitude, lng: location.longitude});
         return {
-          lat: location.latitude,
-          lng: location.longitude
+          lat: Number.parseFloat(location.latitude),
+          lng: Number.parseFloat(location.longitude)
         }
       },
 
       calculateAndDisplayRoute() {
         let directionsService = new google.maps.DirectionsService;
         let directionsDisplay = new google.maps.DirectionsRenderer({map: this.map});
-        let stepDisplay       = new google.maps.InfoWindow;
+        // let stepDisplay       = new google.maps.InfoWindow;
 
         console.log({
                       lat: this.markersArray.start.lat,
