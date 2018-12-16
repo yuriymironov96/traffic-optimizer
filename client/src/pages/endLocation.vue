@@ -27,7 +27,7 @@
     export default {
         name: "endLocation",
         beforeMount() {
-            if (!this.startLocation || !this.order) {
+            if (!this.order) {
                 this.$router.push('/');
             }
         },
@@ -41,7 +41,7 @@
                 this.setEndLocation(location);
             },
             onBack() {
-                this.$router.push('/startLocation')
+                this.$router.push('/order')
             },
             onNext() {
                 this.$router.push('/vehicle')

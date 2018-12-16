@@ -71,7 +71,7 @@
                     number: this.number,
                     weight: this.weight
                 });
-                this.$router.push('/startLocation');
+                this.$router.push('/endLocation');
             },
         }
     }

@@ -128,19 +128,6 @@
 import { mapGetters } from 'vuex';
 export default {
   props: ['onLocationSelection'],
-  mounted() {
-    this.$instance.get(this.api)
-    .then((response) => {
-      if(!response.data.count) {
-        this.fillData();
-      } else {
-        this.locations = response.data.results;
-      }
-    })
-    .catch(function (error) {
-      console.error("Unable to get data" + error);
-    });
-  },
   data() {
     return {
       api: 'locations/locations/',
@@ -174,7 +161,7 @@ export default {
         address  : ' ',
         longitude: 0,
         latitude : 0
-      },
+      }/*,
       locations  : [
         {
           value    : false,
@@ -233,11 +220,11 @@ export default {
           longitude: 49.63,
           latitude : 74.25
         }
-      ]
+      ]*/
     }
   },
   computed: {
-    ...mapGetters(['startLocation','endLocation']),
+    ...mapGetters(['startLocation','endLocation', 'locations']),
     formTitle() {
       return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
     },
@@ -274,22 +261,6 @@ export default {
     }
   },
   methods: {
-    fillData() {
-      this.$instance.post(this.api, {
-        "name": 'Street #1',
-        "address": 'st. Somewhere',
-        "longitude": 30.429656,
-        "latitude": 50.440638,
-      });
-
-      this.$instance.post(this.api, {
-        "name": 'Street #2',
-        "address": 'st. Anywhere',
-        "longitude": 30.466568,
-        "latitude": 50.450940,
-      });
-    },
-
     showError(error) {
       this.errorText = '';
       let errorMessage = '';

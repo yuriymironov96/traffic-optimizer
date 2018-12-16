@@ -13,38 +13,44 @@
             <v-card-text class="text-xs-left">
                 <p><span class="font-weight-bold">From: </span> {{`${from.name} ${from.address}`}}</p>
                 <p><span class="font-weight-bold">To: </span> {{`${to.name} ${to.address}`}}</p>
-                <p><span class="font-weight-bold">Weight: </span> {{order.weight}}</p>
+                <p><span class="font-weight-bold">Weight: </span> {{parseFloat(order.weight).toFixed(2)}}</p>
                 <p><span class="font-weight-bold">Transport: </span> {{`${vehicle.model} ${vehicle.vendor}`}}</p>
                 <p><span class="font-weight-bold">Status: </span> Finished</p>
-
             </v-card-text>
         </v-card>
     </v-slide-x-transition>
 </template>
 <script>
   import MapComponent from "./MapComponent.vue";
+  import { mapGetters } from 'vuex';
 
     export default {
       components: {MapComponent},
         name: 'Report',
         props: {
-            from: {},
-            loadingReport: {},
-            order: {},
-            to: {},
-            vehicle: {}
+            loadingReport: {}
         },
-        data () {
-            return {
-              fromCoord: {
-                latitude: 50.440638,
-                longitude: 30.429656
-              },
-              toCoord: {
-                latitude: 50.450940,
-                longitude: 30.466568
-              }
-            }
+      // data () {
+      //     return {
+      //       fromCoord: {
+      //         latitude: 50.440638,
+      //         longitude: 30.429656
+      //       },
+      //       toCoord: {
+      //         latitude: 50.450940,
+      //         longitude: 30.466568
+      //       }
+      //     }
+      // },
+      computed: {
+        ...mapGetters(['locations', 'vehicle', 'order']),
+        from () {
+          return this.locations.find(location => location.id === this.order.departure_point);
+        },
+        to () {
+          return this.locations.find(
+            location => location.id === this.order.delivery_point);
         }
+      }
     }
 </script>

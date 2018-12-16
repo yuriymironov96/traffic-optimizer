@@ -8,8 +8,7 @@ import store from './store.js'
 import '../assets/app.styl';
 
 const instance = axios.create({
-                                baseURL: 'http://localhost:8000/api',
-                                timeout: 1000
+                                baseURL: 'http://localhost:8000/api'
                               });
 
 Vue.use(Vuetify, {

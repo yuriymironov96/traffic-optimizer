@@ -27,15 +27,15 @@
                 </template>
                 <template slot="items" slot-scope="props">
                     <tr
-                            @click="selectOrder(props)"
+                            @click="selectOrder(props.item)"
                             :key="props.item.id"
-                            :class="{selectedRow: props.item.id === getSelectedItemId}"
+                            :class="{selectedRow: props.item.id === getOrderId}"
                     >
                         <td class="text-xs-left">{{ props.item.customer_name }}</td>
                         <td class="text-xs-center">{{ props.item.customer_phone }}</td>
                         <td class="text-xs-center">{{ props.item.weight }}</td>
-                        <td class="text-xs-center">{{ props.item.departure_point }}</td>
-                        <td class="text-xs-center">{{ props.item.delivery_point }}</td>
+                        <td class="text-xs-center">{{ props.item.departure_point_name }}</td>
+                        <td class="text-xs-center">{{ props.item.delivery_point_name }}</td>
                     </tr>
                 </template>
                 <v-alert slot="no-results" :value="true" color="error" icon="fas fa-exclamation-triangle">
@@ -52,7 +52,6 @@
     export default {
         name: 'OrdersTable',
         props: [
-            'orders',
             'selectOrder'
         ],
         data() {
@@ -66,16 +65,16 @@
                     },
                     {text: 'Customer`s phone', value: 'customer_phone', align: 'center'},
                     {text: 'Weight, kg', value: 'weight', align: 'center'},
-                    {text: 'Departure point', value: 'departure_point', align: 'center'},
-                    {text: 'Delivery point', value: 'delivery_point', align: 'center'}
+                    {text: 'Departure point', value: 'departure_point_name', align: 'center'},
+                    {text: 'Delivery point', value: 'delivery_point_name', align: 'center'}
                 ]
             }
         },
         computed: {
-            ...mapGetters(['orderId']),
-            getSelectedItemId() {
-                return this.orderId;
-            }
+            ...mapGetters(['order', 'orders']),
+          getOrderId() {
+              return this.order ? this.order.id : -1;
+          }
         }
     }
 </script>
