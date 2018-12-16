@@ -9,6 +9,7 @@
             />
             <OrdersTable v-if="!loadingOrders" :orders="orders" :selectOrder="selectOrder" />
         </v-flex>
+        <MapComponent />
         <v-flex xs12 my-4 v-if="!!currentOrder">
             <v-progress-circular
                     v-if="loadingReport"
@@ -22,12 +23,13 @@
 </template>
 
 <script>
+    import MapComponent from "../components/MapComponent.vue";
     import Report from "../components/Report.vue";
     import OrdersTable from "../components/OrdersTable.vue";
     import { mapGetters, mapMutations } from 'vuex';
 
     export default {
-        components: {Report, OrdersTable},
+        components: {Report, OrdersTable, MapComponent},
         mounted() {
             this.$instance.get('orders/parcels/')
                 .then((response) => {
@@ -83,4 +85,3 @@
         }
     }
 </script>
-

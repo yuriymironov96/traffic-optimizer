@@ -2,11 +2,11 @@
     <v-slide-x-transition>
 
         <v-card >
-            <v-img
+            <!-- <v-img
                     src="https://cnet2.cbsistatic.com/img/H_zPLL8-QTZOLxJvgHQ1Jkz0EgY=/830x467/2013/07/10/f0bcef02-67c2-11e3-a665-14feb5ca9861/maps_routemap.png"
                     height="200px"
             >
-            </v-img>
+            </v-img> -->
             <v-card-title primary-title>
                 <div class="text-xs-left">
                     <div class="headline"><span class="font-weight-bold">Customer: </span>{{order.customer_name}}</div>
