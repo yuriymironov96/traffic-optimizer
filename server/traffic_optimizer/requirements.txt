@@ -8,3 +8,4 @@ pep8==1.7.1
 pycodestyle==2.4.0
 pytz==2018.6
 virtualenv==15.1.0
+googlemaps==3.0.2
