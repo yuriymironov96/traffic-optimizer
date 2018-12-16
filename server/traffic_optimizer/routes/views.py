@@ -19,8 +19,8 @@ class RouteViewSet(viewsets.ViewSet):
         parcels = Parcel.objects.all()
 
         origin = {
-            "lat" : parcels[0].departure_point.latitude,
-            "lng": parcels[0].departure_point.longitude
+            "lat" : parcels.first().departure_point.latitude,
+            "lng": parcels.first().departure_point.longitude
         }
 
         waypoints = []
