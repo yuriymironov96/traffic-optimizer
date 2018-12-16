@@ -6,10 +6,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from orders.models import Parcel
-from orders.serializers import ParcelSerializer
-from routes.models import Route
-from vehicles.models import Vehicle
-from vehicles.serializers import VehicleSerializer
 
 
 class RouteViewSet(viewsets.ViewSet):
