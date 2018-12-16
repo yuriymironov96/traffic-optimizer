@@ -142,7 +142,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapMutations } from 'vuex';
 
   export default {
     props   : ['onVehicleSelection'],
@@ -222,6 +222,7 @@
       }
     },
     methods : {
+      ...mapMutations(['setVehicles']),
       showError(error) {
         this.errorText   = '';
         let errorMessage = '';
@@ -270,7 +271,13 @@
             "fuel_consumption"    : this.editedItem.fuel_consumption
           })
             .then((response) => {
-              Object.assign(this.vehicles[newItemIndex], newItem)
+              this.$instance.get(this.api)
+                .then((response) => {
+                  this.setVehicles(response.data.results);
+                })
+                .catch(function (error) {
+                  console.error("Unable to get locations" + error);
+                });
             })
             .catch((error) => {
               this.showError(error);
@@ -287,7 +294,13 @@
             "fuel_consumption"    : this.editedItem.fuel_consumption
           })
             .then((response) => {
-              this.vehicles.push(newItem);
+              this.$instance.get(this.api)
+                .then((response) => {
+                  this.setVehicles(response.data.results);
+                })
+                .catch(function (error) {
+                  console.error("Unable to get locations" + error);
+                });
             })
             .catch((error) => {
               this.showError(error);

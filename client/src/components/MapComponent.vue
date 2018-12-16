@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    props  : ['locations', 'predefined'],
+    props  : ['locations', 'predefined', 'onMarkerCreated'],
     mounted: function () {
       let map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 50.45466, lng: 30.5238},
@@ -34,37 +34,35 @@
           // );
         }
         this.activateCalculation();
-      } /*else {
+
+        this.map = map;
+        this.calculateAndDisplayRoute();
+      } else {
         google.maps.event.addListener(map, 'click', (event) => {
-          console.log(event.latLng, 'event');
-          if (!this.markersArray.start) {
-            this.markersArray.start = this.addMarker(
-              event.latLng,
-              map,
-              "Start Marker"
-            );
-          }
-          else if (!this.markersArray.end) {
-            this.markersArray.end = this.addMarker(
-              event.latLng,
-              map,
-              "End Marker"
-            );
-          } else {
-            this.markersArray.end.setMap(null);
-            this.markersArray.end = this.addMarker(
-              event.latLng,
-              map,
-              "End Marker"
-            );
-          }
-
-          this.activateCalculation();
+          this.currertMarker && this.currertMarker.setMap(null);
+          this.currertMarker = new google.maps.Marker(
+            {
+              position : event.latLng,
+              map      : map,
+              animation: google.maps.Animation.DROP
+            });
+          google.maps.event.addListener(
+            this.currertMarker,
+            'click',
+            function () {
+              // Open an info window when the marker is clicked on, containing the text
+              // of the step.
+              let stepDisplay = new google.maps.InfoWindow;
+              stepDisplay.setContent("Deliver here");
+              stepDisplay.open(
+                map,
+                this.currertMarker
+              );
+            }
+          );
+          this.onMarkerCreated(event.latLng);
         });
-      }*/
-
-      this.map = map;
-      this.calculateAndDisplayRoute();
+      }
     },
     data() {
       return {
@@ -74,7 +72,8 @@
           end  : null
         },
         calculationOn: false,
-        recalculation: false
+        recalculation: false,
+        currertMarker: null
       }
     },
     methods: {
@@ -176,23 +175,6 @@
         this.calculationOn = false;
       },
 
-      addMarker(location, map, context) {
-        let marker = new google.maps.Marker({
-                                              position: location,
-                                              map     : map
-                                            });
-
-        google.maps.event.addListener(marker, 'click', function () {
-          // Open an info window when the marker is clicked on, containing the text
-          // of the step.
-          let stepDisplay = new google.maps.InfoWindow;
-          stepDisplay.setContent(context);
-          stepDisplay.open(map, marker);
-        });
-
-        return marker;
-      },
-
       getCoordinatesFromLocation(location) {
         // return new google.maps.LatLng({lat: location.latitude, lng: location.longitude});
         return {
@@ -218,7 +200,7 @@
                                   origin           : {
                                     lat: this.markersArray.start.lat,
                                     lng: this.markersArray.start.lng
-                                },
+                                  },
                                   destination      : {
                                     lat: this.markersArray.end.lat,
                                     lng: this.markersArray.end.lng
@@ -245,7 +227,7 @@
           }
         });
         this.calculationOn = false;
-      },
+      }
       // showSteps(directionResult, stepDisplay) {
       //   let markers = [...this.markersArray];
       //   let myRoute = directionResult.routes[0].legs[0];

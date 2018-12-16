@@ -9,7 +9,6 @@ export default new Vuex.Store(
       startLocation: null,
       endLocation  : null,
       vehicle      : null,
-      orderId      : null,
       order        : null,
       locations    : [],
       vehicles     : [],

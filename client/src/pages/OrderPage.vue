@@ -24,16 +24,21 @@
 
   export default {
     components: {Report, OrdersTable, MapComponent},
+    mounted() {
+      if (!this.vehicle) {
+        this.setVehicle(this.vehicle[0]);
+      }
+    },
     data() {
       return {
         loadingReport: false
       }
     },
     computed  : {
-      ...mapGetters(['orderId', 'orders', 'order'])
+      ...mapGetters(['orderId', 'orders', 'order', 'vehicle'])
     },
     methods   : {
-      ...mapMutations(['setOrder']),
+      ...mapMutations(['setOrder', 'setVehicle']),
       selectOrder(order) {
         this.loadingReport = true;
         const currentOrder  = this.orders.find((o) => o.id === order.id);

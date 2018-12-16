@@ -21,9 +21,14 @@
 </template>
 
 <script>
+  import { mapMutations } from 'vuex';
   export default {
     name: "MainPage",
+    mounted() {
+      this.setOrder(null);
+    },
     methods: {
+      ...mapMutations(['setOrder']),
       createRequest() {
         this.$router.push('/order');
       },
