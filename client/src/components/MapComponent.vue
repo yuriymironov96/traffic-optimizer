@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    props  : ['locations', 'predefined'],
+    props  : ['locations', 'predefined', 'onMarkerCreated'],
     mounted: function () {
       let map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 50.45466, lng: 30.5238},
