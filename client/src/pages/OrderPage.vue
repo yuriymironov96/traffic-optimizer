@@ -17,16 +17,15 @@
 </template>
 
 <script>
-  import MapComponent from "../components/MapComponent.vue";
   import Report from "../components/Report.vue";
   import OrdersTable from "../components/OrdersTable.vue";
   import { mapGetters, mapMutations } from 'vuex';
 
   export default {
-    components: {Report, OrdersTable, MapComponent},
+    components: {Report, OrdersTable},
     mounted() {
       if (!this.vehicle) {
-        this.setVehicle(this.vehicle[0]);
+        this.setVehicle(this.vehicles[0]);
       }
     },
     data() {
@@ -35,13 +34,13 @@
       }
     },
     computed  : {
-      ...mapGetters(['orderId', 'orders', 'order', 'vehicle'])
+      ...mapGetters(['orderId', 'orders', 'order', 'vehicle', 'vehicles'])
     },
     methods   : {
       ...mapMutations(['setOrder', 'setVehicle']),
       selectOrder(order) {
         this.loadingReport = true;
-        const currentOrder  = this.orders.find((o) => o.id === order.id);
+        const currentOrder = this.orders.find((o) => o.id === order.id);
         this.setOrder(currentOrder);
         setTimeout(() => this.loadingReport = false, 700);
       }

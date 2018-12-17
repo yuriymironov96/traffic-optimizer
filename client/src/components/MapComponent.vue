@@ -7,7 +7,7 @@
 
 <script>
   export default {
-    props  : ['locations', 'predefined', 'onMarkerCreated'],
+    props  : ['locations', 'predefined'],
     mounted: function () {
       let map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 50.45466, lng: 30.5238},
@@ -15,28 +15,33 @@
       });
 
       if (this.predefined) {
-        if (this.locations[0]) {
-          this.markersArray.start = this.getCoordinatesFromLocation(this.locations[0]);
-          // const startCoordinates  = this.getCoordinatesFromLocation(this.locations[0]);
-          // this.markersArray.start = this.addMarker(
-          //   startCoordinates,
-          //   map,
-          //   "Start"
-          // );
-        }
-        if (this.locations[1]) {
-          this.markersArray.end = this.getCoordinatesFromLocation(this.locations[1]);
-          // const endCoordinates  = this.getCoordinatesFromLocation(this.locations[1]);
-          // this.markersArray.end = this.addMarker(
-          //   endCoordinates,
-          //   map,
-          //   "End"
-          // );
-        }
-        this.activateCalculation();
+        if (this.locations) {
+          if (this.locations[0]) {
+            this.markersArray.start = this.getCoordinatesFromLocation(this.locations[0]);
+            // const startCoordinates  = this.getCoordinatesFromLocation(this.locations[0]);
+            // this.markersArray.start = this.addMarker(
+            //   startCoordinates,
+            //   map,
+            //   "Start"
+            // );
+          }
+          if (this.locations[1]) {
+            this.markersArray.end = this.getCoordinatesFromLocation(this.locations[1]);
+            // const endCoordinates  = this.getCoordinatesFromLocation(this.locations[1]);
+            // this.markersArray.end = this.addMarker(
+            //   endCoordinates,
+            //   map,
+            //   "End"
+            // );
+          }
+          this.activateCalculation();
 
-        this.map = map;
-        this.calculateAndDisplayRoute();
+          this.map = map;
+          this.calculateAndDisplayRoute();
+        } else {
+          this.map = map;
+          this.calculateAndDisplayMultipleRoute();
+        }
       } else {
         google.maps.event.addListener(map, 'click', (event) => {
           this.currertMarker && this.currertMarker.setMap(null);
@@ -73,7 +78,8 @@
         },
         calculationOn: false,
         recalculation: false,
-        currertMarker: null
+        currertMarker: null,
+        routes       : null
       }
     },
     methods: {
@@ -182,20 +188,43 @@
           lng: Number.parseFloat(location.longitude)
         }
       },
+      calculateAndDisplayMultipleRoute() {
+        this.$instance.get('routes/routes/')
+          .then(
+            (response) => {
+              const routes          = response.data.route;
+              let directionsDisplay = new google.maps.DirectionsRenderer({map: this.map});
+              let directionsService = new google.maps.DirectionsService;
 
-      calculateAndDisplayRoute() {
+              let waypoints = routes.waypoints.map(wpt => ({
+                location: {
+                  lat: wpt.lat,
+                  lng: wpt.lng
+                },
+                stopover: true
+              }));
+
+              directionsService.route(
+                {
+                  origin           : routes.origin,
+                  destination      : routes.destination,
+                  waypoints        : waypoints,
+                  optimizeWaypoints: true,
+                  travelMode       : 'DRIVING'
+                }, function (response, status) {
+                  if (status === 'OK') {
+                    directionsDisplay.setDirections(response);
+                  } else {
+                    window.alert('Directions request failed due to ' + status);
+                  }
+                });
+            });
+      },
+      calculateAndDisplayRoute(route) {
         let directionsService = new google.maps.DirectionsService;
         let directionsDisplay = new google.maps.DirectionsRenderer({map: this.map});
         // let stepDisplay       = new google.maps.InfoWindow;
 
-        console.log({
-                      lat: this.markersArray.start.lat,
-                      lng: this.markersArray.start.lng
-                    }, 'start');
-        console.log({
-                      lat: this.markersArray.end.lat,
-                      lng: this.markersArray.end.lng
-                    }, 'end');
         directionsService.route({
                                   origin           : {
                                     lat: this.markersArray.start.lat,
@@ -228,22 +257,6 @@
         });
         this.calculationOn = false;
       }
-      // showSteps(directionResult, stepDisplay) {
-      //   let markers = [...this.markersArray];
-      //   let myRoute = directionResult.routes[0].legs[0];
-      //   for (var i = 0; i < myRoute.steps.length; i++) {
-      //     var marker = markers[i] = markers[i] || new google.maps.Marker;
-      //     marker.setMap(this.map);
-      //     marker.setPosition(myRoute.steps[i].start_location);
-      //
-      //     google.maps.event.addListener(marker, 'click', function () {
-      //       // Open an info window when the marker is clicked on, containing the text
-      //       // of the step.
-      //       stepDisplay.setContent(myRoute.steps[i].instructions);
-      //       stepDisplay.open(this.map, marker);
-      //     });
-      //   }
-      // }
     }
   }
 </script>
